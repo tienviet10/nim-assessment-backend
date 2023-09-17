@@ -27,4 +27,36 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getOne, create };
+const update = async (req, res) => {
+  try {
+    const updatedFields = req.body;
+    const fieldsToUpdate = {};
+
+    if (updatedFields.name) {
+      fieldsToUpdate.name = updatedFields.name;
+    }
+
+    const priceAsFloat = parseFloat(updatedFields.price);
+    if (updatedFields.price && !Number.isNaN(priceAsFloat) && typeof priceAsFloat === "number") {
+      fieldsToUpdate.price = priceAsFloat;
+    }
+
+    if (updatedFields.description) {
+      fieldsToUpdate.description = updatedFields.description;
+    }
+
+    fieldsToUpdate.updatedAt = new Date();
+
+    const updatedMenu = await MenuItems.update(req.params.id, fieldsToUpdate);
+
+    if (!updatedMenu) {
+      return res.status(500).send({});
+    }
+
+    return res.send(updatedMenu);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+module.exports = { getAll, getOne, create, update };
