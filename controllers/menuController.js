@@ -27,4 +27,67 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getOne, create };
+const update = async (req, res) => {
+  try {
+    const updatedFields = req.body;
+    const fieldsToUpdate = {};
+
+    if (updatedFields.name) {
+      fieldsToUpdate.name = updatedFields.name;
+    }
+
+    const priceAsFloat = parseFloat(updatedFields.price);
+    if (updatedFields.price && !Number.isNaN(priceAsFloat) && typeof priceAsFloat === "number") {
+      fieldsToUpdate.price = priceAsFloat;
+    }
+
+    if (updatedFields.description) {
+      fieldsToUpdate.description = updatedFields.description;
+    }
+
+    fieldsToUpdate.updatedAt = new Date();
+
+    const updatedMenu = await MenuItems.update(req.params.id, fieldsToUpdate);
+
+    if (!updatedMenu) {
+      return res.status(500).send({});
+    }
+
+    return res.send(updatedMenu);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+const deleteOne = async (req, res) => {
+  try {
+    const deletedItem = await MenuItems.deleteOne(req.params.id);
+
+    if (!deletedItem) {
+      return res.status(500).send({});
+    }
+
+    return res.send({ deletedItemId: req.params.id });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+const search = async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    if (!query) {
+      return res.status(500).send({});
+    }
+
+    const regex = new RegExp(query, "i");
+    const matchingItems = await MenuItems.search(regex);
+
+    return res.send(matchingItems);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+module.exports = { getAll, getOne, create, update, deleteOne, search };

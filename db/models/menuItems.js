@@ -51,4 +51,40 @@ const create = async (body) => {
   }
 };
 
-module.exports = { getAll, getOne, create, MenuItems };
+const update = async (id, updatedFields) => {
+  try {
+    const updatedMenuItem = await MenuItems.findOneAndUpdate(
+      { _id: id },
+      { $set: updatedFields },
+      { new: true }
+    );
+
+    return updatedMenuItem;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+const deleteOne = async (id) => {
+  try {
+    const deleteMenuItem = await MenuItems.findByIdAndDelete(id);
+
+    return deleteMenuItem;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+const search = async (regex) => {
+  try {
+    const matchingMenuItems = await MenuItems.find({
+      $or: [{ name: regex }, { description: regex }]
+    });
+
+    return matchingMenuItems;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+module.exports = { getAll, getOne, create, update, deleteOne, search, MenuItems };
