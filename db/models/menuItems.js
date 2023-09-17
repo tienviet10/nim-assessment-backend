@@ -75,4 +75,16 @@ const deleteOne = async (id) => {
   }
 };
 
-module.exports = { getAll, getOne, create, update, deleteOne, MenuItems };
+const search = async (regex) => {
+  try {
+    const matchingMenuItems = await MenuItems.find({
+      $or: [{ name: regex }, { description: regex }]
+    });
+
+    return matchingMenuItems;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+module.exports = { getAll, getOne, create, update, deleteOne, search, MenuItems };

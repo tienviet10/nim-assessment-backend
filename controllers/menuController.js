@@ -73,4 +73,21 @@ const deleteOne = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getOne, create, update, deleteOne };
+const search = async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    if (!query) {
+      return res.status(500).send({});
+    }
+
+    const regex = new RegExp(query, "i");
+    const matchingItems = await MenuItems.search(regex);
+
+    return res.send(matchingItems);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+module.exports = { getAll, getOne, create, update, deleteOne, search };
