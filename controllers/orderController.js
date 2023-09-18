@@ -67,6 +67,35 @@ const getByStatus = async (req, res) => {
   }
 };
 
+const getTotalSales = async (_, res) => {
+  try {
+    const orders = await Order.getTotalSales();
+    if (!orders.length && !orders[0].total) {
+      return res.status(500).send(0);
+    }
+    return res.send({ total: orders[0].total });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+const getOrdersByStatus = async (req, res) => {
+  try {
+    const status = req.query.s;
+    const statusList = ["pending", "confirmed", "delivered", "cancelled"];
+
+    if (!status || !statusList.includes(status)) {
+      return res.status(500).send("Please provide a valid status");
+    }
+
+    const orders = await Order.ordersByStatus(status);
+
+    return res.send(orders);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
 module.exports = {
   getAll,
   getOne,
@@ -74,5 +103,7 @@ module.exports = {
   update,
   remove,
   getByCustomer,
-  getByStatus
+  getByStatus,
+  getTotalSales,
+  getOrdersByStatus
 };

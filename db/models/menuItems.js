@@ -16,6 +16,10 @@ const menuItemsSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
 });
 menuItemsSchema.set("toJSON", {
@@ -87,4 +91,12 @@ const search = async (regex) => {
   }
 };
 
-module.exports = { getAll, getOne, create, update, deleteOne, search, MenuItems };
+module.exports = {
+  getAll,
+  getOne,
+  create,
+  update,
+  deleteOne,
+  search,
+  MenuItems
+};
