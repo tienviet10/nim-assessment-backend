@@ -39,7 +39,11 @@ const update = async (req, res) => {
     }
 
     const priceAsFloat = parseFloat(updatedFields.price);
-    if (updatedFields.price && !Number.isNaN(priceAsFloat) && typeof priceAsFloat === "number") {
+    if (
+      updatedFields.price &&
+      !Number.isNaN(priceAsFloat) &&
+      typeof priceAsFloat === "number"
+    ) {
       fieldsToUpdate.price = priceAsFloat;
     }
 

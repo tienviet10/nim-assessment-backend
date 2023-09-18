@@ -91,4 +91,12 @@ const search = async (regex) => {
   }
 };
 
-module.exports = { getAll, getOne, create, update, deleteOne, search, MenuItems };
+module.exports = {
+  getAll,
+  getOne,
+  create,
+  update,
+  deleteOne,
+  search,
+  MenuItems
+};
