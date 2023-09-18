@@ -32,6 +32,8 @@ const update = async (req, res) => {
     const updatedFields = req.body;
     const fieldsToUpdate = {};
 
+    fieldsToUpdate.updatedAt = new Date();
+
     if (updatedFields.name) {
       fieldsToUpdate.name = updatedFields.name;
     }
@@ -44,8 +46,6 @@ const update = async (req, res) => {
     if (updatedFields.description) {
       fieldsToUpdate.description = updatedFields.description;
     }
-
-    fieldsToUpdate.updatedAt = new Date();
 
     const updatedMenu = await MenuItems.update(req.params.id, fieldsToUpdate);
 
@@ -67,7 +67,7 @@ const deleteOne = async (req, res) => {
       return res.status(500).send({});
     }
 
-    return res.send({ deletedItemId: req.params.id });
+    return res.send(req.params.id);
   } catch (error) {
     return res.status(500).send(error);
   }
